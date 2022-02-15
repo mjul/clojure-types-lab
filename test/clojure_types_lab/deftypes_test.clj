@@ -1,6 +1,7 @@
-(ns clojure-types-lab.core-test
+(ns clojure-types-lab.deftypes-test
   (:require [clojure.test :refer :all]
-            [clojure-types-lab.core :as sut]))
+            [clojure.data.json :as json]
+            [clojure-types-lab.deftypes :as sut]))
 
 (deftest FooValue-test
   (testing "FooValue has value semantics"
@@ -24,3 +25,10 @@
         (is (not (.equals a otherValue)))
         (is (not= a otherFooValue))
         (is (not= a otherValue))))))
+
+(deftest FooValue-serialization-test
+  (testing "Can serialise to JSON and back"
+    (let [x (sut/->FooValue 42)
+          serialized (json/write-str x)
+          deserialized (json/read-str serialized :key-fn keyword)]
+      (is (= {:type "clojure-types-lab.deftypes.FooValue" :value 42} deserialized)))))
