@@ -11,8 +11,8 @@
   (toString [_] (str value))
   (^boolean equals [_ other]
     (and (instance? FooValue other)
-         (= value (.value other))))
-  (hashCode [_] value))
+         (= value (.value ^FooValue other))))
+  (^int hashCode [_] value))
 
 ;; this type is not JSON serialisable, so we must help a bit
 (defn write-json-FooValue [object output options]
@@ -21,4 +21,3 @@
 (extend FooValue json/JSONWriter {:-write write-json-FooValue})
 
 ;; Unfortunately there is no way to read it back, we have to manually map it after deserialising this
-

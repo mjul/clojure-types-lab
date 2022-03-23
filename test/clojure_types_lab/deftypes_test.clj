@@ -1,5 +1,5 @@
 (ns clojure-types-lab.deftypes-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [deftest testing is]]
             [clojure.data.json :as json]
             [clojure-types-lab.deftypes :as sut]))
 
