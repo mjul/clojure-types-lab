@@ -25,3 +25,13 @@ Thanks to the `lein-typed` extension, you can run the type-checker from Leininge
 
 See https://github.com/typedclojure/lein-typed for more information
 
+
+## Documentation for Typed Clojure
+Core Typed was the previous incarnation of Typed Clojure. They are quite similar.
+The Core Typed documentation here is thus quite useful for Typed Clojure:
+
+https://clojure-doc.org/articles/ecosystem/core_typed/home/
+
+https://clojure-doc.org/articles/ecosystem/core_typed/quick_guide/
+
+https://clojure-doc.org/articles/ecosystem/core_typed/types/
