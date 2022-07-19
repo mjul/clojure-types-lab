@@ -16,3 +16,12 @@ Would using `deftype` be useful for value types, e.g. specifically typed FooId B
 Giving typed Clojure a quick trial.
 See [source](src/clojure_types_lab/typed.clj)
 
+## Running the Type Checker
+Thanks to the `lein-typed` extension, you can run the type-checker from Leiningen like this:
+
+```
+    lein typed check
+```
+
+See https://github.com/typedclojure/lein-typed for more information
+
