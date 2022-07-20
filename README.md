@@ -1,4 +1,16 @@
 # Clojure Types Lab 
+
+When Clojure projects grow they become unwieldy and expensive to maintain. 
+
+Small refactorings take a long time. There is very little help from the compiler, so you end up with lots of preconditions and predicates to check especially function inputs over and over. 
+
+This problem happens earlier for applications with higher domain complexity and later for e.g. small "CRUD"-style 
+applications with shallow business logic and a database schema to act as a forcing function to keep everything consistent.
+
+Let us explore some of the options to reduce these problems inside the Clojure ecosystem
+before we abandon it altogether.
+
+
 ## Or how to make the compiler take over more tedious work
 
 Following the virtues of laziness, impatience and hubris known to any Perl programmer: 
