@@ -44,7 +44,7 @@
 ;; the argument x is a number. This is called occurrence typing.
 ;; It uses something called latent filters in Typed Clojure:
 ;; 0 is the first argument
-(t/ann positive-int? [t/Any -> t/Bool
+(t/ann positive-int? [t/Any :-> t/Bool
                       :filters {:then (is Number 0)
                                 ;; :else branch not defined
                                 }])
@@ -52,10 +52,11 @@
 ;; We can use t/print-env to inspect the type-checker's environment
 ;; at any given point when compiling. 
 ;; This is useful to troubleshoot problems.
+(t/ann add-type-information-from-pre [t/Any :-> t/Num])
 (defn add-type-information-from-pre [x]
   {:pre [(positive-int? x)]}
-  (t/print-env "The type-checker environment here is: ")
-  ;; When you compile you get this message from print-env:
+  ;; If you uncomment this print-env you will get the message below when the checker runs
+  ;; (t/print-env "The type-checker environment here is: ")
   ;;;; 
   ;;;; The type-checker environment here is: 
   ;;;; {:env {x__#0 Number}, :props ((is typed.clojure/Num x__#0)), :aliases {}}
@@ -80,13 +81,18 @@
   {:pre [(party-id? id)]}
   {:id id, :name name})
 
+;; It would be convenient to define aliases for e.g. the Party map above.
+;; We can do this with defalias:
+(t/defalias Party '{:id t/Int :name t/Str})
 
 ;; Heterogeneous maps are maps with a minimum set of defined keys
 ;; E.g. if the parties to a contract are at least a buyer and a seller we can define it like this
-;;(t/ann parties [Party Party :-> (t/HMap :mandatory {:buyer Party :seller Party})])
-#_(defn parties
+(t/ann parties [Party Party
+                :-> (t/HMap :mandatory {:buyer Party :seller Party})])
+(defn parties
   [buyer seller]
   {:buyer buyer :seller seller})
+
 
 ;; We can define a type alias for the Parties data structure like this to make it reusable
 
