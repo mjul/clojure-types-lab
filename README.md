@@ -21,8 +21,17 @@ thus puts undue burden on the developer.
 
 Let's see if we can stretch this Lisp to help us a bit more.
 
+# The Problem with Tagged Values 
+A common Lisp idiom to avoid [Primitive Obsession](https://wiki.c2.com/?PrimitiveObsession) is by
+using tagged values (wrapping primitives in maps that also include a type specifier), *e.g.* `{:tag ::foo-id :value 42}` and `{:tag ::bar-id :value 42}`.
+
+Tagged values are well suited for multimethod dispatch, the primitive Clojure compiler cannot provide much help for these.
+
 # Deftype Value Objects
-Would using `deftype` be useful for value types, e.g. specifically typed FooId BarId for domain objects of type Foo and Bar?
+Would using `deftype` be useful for value types, *e.g.* specifically typed FooId and BarId for IDs for domain objects of type Foo and Bar?
+
+We explore this in [deftypes.clj](src/clojure_types_lab/deftypes.clj) and the associated [test](test/clojure_types_lab/deftypes_test.clj).
+
 
 # Typed Clojure
 Giving typed Clojure a quick trial.
