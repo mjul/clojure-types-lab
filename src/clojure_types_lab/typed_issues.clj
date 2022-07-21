@@ -51,4 +51,21 @@
   )
 
 
-(comment)
+(comment
+  
+  ;; clojure.core/tree-seq is not annotated:
+  (t/cf (tree-seq map?
+                  :children
+                  {:tag :root :value 1
+                   :children [{:tag :child :value :c1} {:tag :child :value :c2}]}
+                  :children))
+
+  ;=>
+  ; ; Type Error (c:\Users\marti\src\github\mjul\clojure-types-lab\src\clojure_types_lab\typed_issues.clj:56:9) 
+  ; ; Unannotated var clojure.core/tree-seq
+  ; ; 
+  ; ; 
+  ; in:
+  ; tree-seq
+
+  )
