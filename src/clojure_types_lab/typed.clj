@@ -137,3 +137,23 @@
   (t/cf '(juxt :a :b {:a 1 :b 2 :c 3}))
   
   )
+
+
+
+;;; Bug reports and interesting-looking snippets below:
+
+(comment
+
+  ;; This looks like it could be reduced (Typed Clojure 1.0.31)
+
+  (t/cf (defn foo? [x]
+          (and (map? x)
+               (clojure.set/subset? #{:id :foo} (set (keys x))))))
+
+  ;=> 
+  ; [(Var
+  ;  [t/Any -> Boolean :filters {:then (is (t/Map t/Any t/Any) 0), :else tt}]
+  ;  [t/Any -> Boolean :filters {:then (is (t/Map t/Any t/Any) 0), :else tt}])
+  ; {:then tt, :else ff}]
+
+  )
