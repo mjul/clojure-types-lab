@@ -1,6 +1,6 @@
 (ns clojure-types-lab.typed
   {:lang :core.typed}
-  (:require [clojure.core.typed :as t]))
+  (:require [typed.clojure :as t]))
 
 
 ;; t/ann adds an annotation to a var
@@ -94,7 +94,6 @@
   {:buyer buyer :seller seller})
 
 
-;; We can define a type alias for the Parties data structure like this to make it reusable
 
 ;;(t/ann-record Company [id :- t/UUID, contract-id :- t/Str, name :- t/Str])
 ;;(defrecord Contract [id contract-id name])
@@ -131,10 +130,9 @@
 
 (comment
 
-  (type (int 32))
   (t/install)
 
-  (t/check-ns)
+  (t/check-ns-clj)
   (t/cf '(clojure.core.typed/rclass-pred :a :b))
   (t/cf '(juxt :a :b {:a 1 :b 2 :c 3}))
   
