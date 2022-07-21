@@ -94,6 +94,14 @@
   {:buyer buyer :seller seller})
 
 
+;; You can ask the type-checker to output debug information by adding 
+;; meta-data to a form (^::t/dbg ):
+(t/ann debug-info [t/Int :-> t/Num])
+(defn debug-info
+  [x]
+  ^::t/dbg (+ 1 x))
+
+
 
 ;;(t/ann-record Company [id :- t/UUID, contract-id :- t/Str, name :- t/Str])
 ;;(defrecord Contract [id contract-id name])
