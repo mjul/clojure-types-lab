@@ -70,10 +70,10 @@
 
 ;; ----------------------------------------------------------------
 ;; Combining latent filters for predicates in and form is 
-;; currently weaker than necessary:
+;; currently weaker than necessary: (remove ^:no-check and type-check to see the error)
 
 (t/defalias PartyId Long)
-(t/ann party-id? (t/Pred PartyId))
+(t/ann ^:no-check party-id? (t/Pred PartyId))
 (defn party-id? [x]
   ^::t/dbg
   (and
@@ -108,3 +108,26 @@
 ;;  in:
 ;;  (fn* ([x] (and (instance? Long x) (pos-int? x))))
 
+
+;; ----------------------------------------------------------------
+;; Multiple arities can make the type-checker fail:
+
+
+;; We can annotate functions with multiple arities like this
+(t/ann ^:no-check sum (t/IFn
+                       [:-> t/Int]
+                       [t/Int :-> t/Int]
+                       [t/Int t/Int :-> t/Int]
+                       [t/Int t/Int * :-> t/Int]))
+(defn sum
+  ([] 0)
+  ([x] x)
+  ([x y] (+ x y))
+  ;; The apply sum breaks the type-checker (it can be rewritten with reduce sum to make it work)
+  ([x y & more] (+ x y (apply sum more))))
+
+
+;; The type-checker does not support that construct yet, so we get an error:
+
+;; Type Error (file:...typed_issues.clj:127:24) 
+;; core.typed Not Yet Implemented Error:(file:...typed_issues.clj:127:24) "NYI HSequential inference " (t/HSeq [t/Int *]) (t/HSequential [z ... z])
