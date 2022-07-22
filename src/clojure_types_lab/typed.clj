@@ -31,7 +31,7 @@
 ;; See below for how we might refine this 
 (t/ann positive-int? [t/Any -> t/Bool])
 (defn positive-int? [x]
-  (and (number? x) 
+  (and (number? x)
        ;; For some reason if we don't have the number? above, the type-checker 
        ;; does not know that x is a t/Number so it will fail the type-check on 
        ;; (pos? ^int x) below.
@@ -66,14 +66,18 @@
   (inc x))
 
 
-;; Let's try this latent filter in action:
-(t/ann party-id? [t/Any :-> t/Bool :filters {:then (is Number 0)}])
+;; Now that we know about the latent filters, we can do something simpler
+;; In the common case of predicate functions, we can annotate them with
+;; the shorter t/Pred.
+
+;; Note that :filters don't compose well with `and` so we have do use ^:no-check
+;; (this is also the case if we wrote out the predicate signature with latent filters like above)
+(t/defalias PartyId Long)
+(t/ann ^:no-check party-id? (t/Pred PartyId))
+
 (defn party-id? [x]
-  (and (number? x)
-       (int? x)
-       (pos? ^int x)))
-
-
+  (and (instance? Long x)
+       (pos? x)))
 
 ;; We can return a fixed map structure by specifying the keys and their values
 (t/ann party [t/Int t/Str :-> '{:id t/Int :name t/Str}])
@@ -101,6 +105,20 @@
   [x]
   ^::t/dbg (+ 1 x))
 
+
+;; We can annotate functions with multiple arities like this
+(t/ann sum (t/IFn
+            [:-> t/Int]
+            [t/Int :-> t/Int]
+            [t/Int t/Int :-> t/Int]
+            [t/Int t/Int t/Int * :-> t/Int]))
+(defn sum
+  ([] 0)
+  ([x] x)
+  ([x y] (+ x y))
+  ([x y & more]
+   ;; If we write it like this with reduce the type-checker will be happy (see typed_issues.clj for a counter-example))
+   (reduce sum (sum x y) more)))
 
 
 ;;(t/ann-record Company [id :- t/UUID, contract-id :- t/Str, name :- t/Str])
