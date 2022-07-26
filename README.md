@@ -32,10 +32,12 @@ Would using `deftype` be useful for value types, *e.g.* specifically typed FooId
 
 We explore this in [deftypes.clj](src/clojure_types_lab/deftypes.clj) and the associated [test](test/clojure_types_lab/deftypes_test.clj).
 
-
 # Typed Clojure
-Giving typed Clojure a quick trial.
+In lieu of compiler support, we may use the Typed Clojure library to assist with type checking 
+and possibly gain benefits from this.
+
 See [source](src/clojure_types_lab/typed.clj)
+
 
 ## Running the Type Checker
 Thanks to the `lein-typed` extension, you can run the type-checker from Leiningen like this:
@@ -45,6 +47,26 @@ Thanks to the `lein-typed` extension, you can run the type-checker from Leininge
 ```
 
 See https://github.com/typedclojure/lein-typed for more information
+
+In the REPL, you can run the type-checker on the current namespace:
+
+```clojure
+    (t/cns)
+```
+
+You can get the type of a single form like this:
+
+```clojure
+    (t/cf (fn [x] (str x)))
+    ;=> [[t/Any -> t/Str] {:then tt, :else ff}]
+```
+
+Or check it against a specific type like this:
+
+```clojure
+    (t/cf (fn [x] (str x)) (t/IFn [t/Any :-> t/Int]))
+    ;=> [[t/Any -> t/Str] {:then tt, :else ff}]
+```
 
 
 ## Documentation for Typed Clojure
