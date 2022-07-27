@@ -1,7 +1,8 @@
 (ns clojure-types-lab.typed.core
   {:lang :core.typed}
   (:require [typed.clojure :as t]
-            [typed.clojure.jvm :as tjvm]))
+            [typed.clojure.jvm :as tjvm])
+  (:import [java.util Currency]))
 
 
 ;; t/ann adds an annotation to a var
@@ -143,14 +144,16 @@
 ;; This method raises returns a non-nil instance or raises an exception.
 ;; We can eliminate the nil-case like this:
 ;; (:all means all overloads)
+;; 
+;; Note: specify the fully qualified symbol, not the shorter form created by :import in the ns form.
 (tjvm/non-nil-return java.util.Currency/getInstance :all)
 
+;; Note that we have to type out is its fully qualified name
 (t/ann get-francs [:-> java.util.Currency])
+
 (defn get-francs
   []
-  (java.util.Currency/getInstance "CHF"))
-
-
+   (Currency/getInstance "CHF"))
 
 
 ;;(t/ann-record Company [id :- t/UUID, contract-id :- t/Str, name :- t/Str])
