@@ -40,4 +40,4 @@
 
 (deftest type-check-test
   (testing "Type checks pass"
-    (is (t/check-ns-clj 'clojure-types-lab.typed))))
+    (is (t/check-ns-clj 'clojure-types-lab.typed.core))))
