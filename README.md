@@ -38,7 +38,6 @@ and possibly gain benefits from this.
 
 See [source](src/clojure_types_lab/typed.clj)
 
-
 ## Running the Type Checker
 Thanks to the `lein-typed` extension, you can run the type-checker from Leiningen like this:
 
@@ -68,6 +67,17 @@ Or check it against a specific type like this:
     ;=> [[t/Any -> t/Str] {:then tt, :else ff}]
 ```
 
+## Type Annotations for Clojure Code
+
+## Type Annotations for Java (JVM) interop
+
+This is also covered. 
+
+You may need to clarify whether methods may or may not return nil (null) for reference types
+using the `non-nil-return` annotation in the `typed.clojure.jvm` namespace.
+
+
+See [source](src/clojure_types_lab/typed.clj)
 
 ## Documentation for Typed Clojure
 Core Typed was the previous incarnation of Typed Clojure. They are quite similar.
@@ -78,3 +88,8 @@ https://clojure-doc.org/articles/ecosystem/core_typed/home/
 https://clojure-doc.org/articles/ecosystem/core_typed/quick_guide/
 
 https://clojure-doc.org/articles/ecosystem/core_typed/types/
+
+### Differences from Core Typed
+
+- Function return values are indicated by `:->`
+- JVM interop features are now in the `typed.clojure.jvm` namespace, e.g. `non-nil-return`.

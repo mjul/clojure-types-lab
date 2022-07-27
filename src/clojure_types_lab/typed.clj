@@ -1,6 +1,7 @@
 (ns clojure-types-lab.typed
   {:lang :core.typed}
-  (:require [typed.clojure :as t]))
+  (:require [typed.clojure :as t]
+            [typed.clojure.jvm :as tjvm]))
 
 
 ;; t/ann adds an annotation to a var
@@ -119,6 +120,37 @@
   ([x y & more]
    ;; If we write it like this with reduce the type-checker will be happy (see typed_issues.clj for a counter-example))
    (reduce sum (sum x y) more)))
+
+
+;;
+;; Java (JVM) interop
+;;
+
+;; The type-checker assumes that reference types may be null when analyzing type signatures for JVM code.
+;; For example, consider the Java method
+;; 
+;; public String getFoo() { return "foo"; }
+;; 
+;; It has the signature [:-> (t/U String nil)]
+;;
+;; When we know that it cannot return null we can annotate it with "non-nil-return"
+;;
+
+;; For example, we get this problem with currencies
+;; (t/cf (java.util.Currency/getInstance "CHF"))
+;; ;=> (t/U nil java.util.Currency)
+;;
+;; This method raises returns a non-nil instance or raises an exception.
+;; We can eliminate the nil-case like this:
+;; (:all means all overloads)
+(tjvm/non-nil-return java.util.Currency/getInstance :all)
+
+(t/ann get-francs [:-> java.util.Currency])
+(defn get-francs
+  []
+  (java.util.Currency/getInstance "CHF"))
+
+
 
 
 ;;(t/ann-record Company [id :- t/UUID, contract-id :- t/Str, name :- t/Str])
