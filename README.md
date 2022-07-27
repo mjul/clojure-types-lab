@@ -36,7 +36,8 @@ We explore this in [deftypes.clj](src/clojure_types_lab/deftypes.clj) and the as
 In lieu of compiler support, we may use the Typed Clojure library to assist with type checking 
 and possibly gain benefits from this.
 
-See [source](src/clojure_types_lab/typed.clj)
+See [source](src/clojure_types_lab/typed/core.clj)
+
 
 ## Running the Type Checker
 Thanks to the `lein-typed` extension, you can run the type-checker from Leiningen like this:
@@ -77,7 +78,12 @@ You may need to clarify whether methods may or may not return nil (null) for ref
 using the `non-nil-return` annotation in the `typed.clojure.jvm` namespace.
 
 
-See [source](src/clojure_types_lab/typed.clj)
+See [source](src/clojure_types_lab/typed/core.clj)
+
+## Typed Clojure Issues
+
+See the [issues.clj](src/clojure_types_lab/typed/issues.clj) for various 
+problems related to Typed Clojure.
 
 ## Documentation for Typed Clojure
 Core Typed was the previous incarnation of Typed Clojure. They are quite similar.

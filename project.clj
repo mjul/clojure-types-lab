@@ -6,6 +6,6 @@
                  [org.typedclojure/typed.clj.runtime "1.0.31"]]
   :plugins [[lein-typed "0.4.6"]
             [lein-ancient "1.0.0-RC4-SNAPSHOT"]]
-  :core.typed {:check [clojure-types-lab.typed]}
+  :core.typed {:check [clojure-types-lab.typed.core]}
   :repl-options {:init-ns clojure-types-lab.typed})
  

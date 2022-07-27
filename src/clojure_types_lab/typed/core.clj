@@ -1,4 +1,4 @@
-(ns clojure-types-lab.typed
+(ns clojure-types-lab.typed.core
   {:lang :core.typed}
   (:require [typed.clojure :as t]
             [typed.clojure.jvm :as tjvm]))

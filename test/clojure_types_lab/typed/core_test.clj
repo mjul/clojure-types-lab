@@ -1,6 +1,6 @@
-(ns clojure-types-lab.typed-test
+(ns clojure-types-lab.typed.core-test
   (:require
-   [clojure-types-lab.typed :as sut]
+   [clojure-types-lab.typed.core :as sut]
    [typed.clojure :as t] ; the typed type-checker
    [clojure.test :refer [deftest is are testing]]))
 

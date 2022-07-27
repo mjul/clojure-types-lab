@@ -1,4 +1,4 @@
-(ns clojure-types-lab.typed-issues
+(ns clojure-types-lab.typed.issues
   {:lang :core.typed}
   (:require
    [clojure.set :as set]
