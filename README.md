@@ -109,6 +109,8 @@ problems related to Typed Clojure.
 
 Unfortunately, the documentation for Typed Clojure is quite sparse.
 
+You can find the API documentation here: https://api.typedclojure.org/latest/typed.clj.runtime/index.html
+
 ### Example Type Annotations
 
 Typed Clojure includes annotations for most of the standard Clojure core library.
