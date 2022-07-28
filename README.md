@@ -77,8 +77,28 @@ This is also covered.
 You may need to clarify whether methods may or may not return nil (null) for reference types
 using the `non-nil-return` annotation in the `typed.clojure.jvm` namespace.
 
-
 See [source](src/clojure_types_lab/typed/core.clj)
+
+## Typing multiple files
+
+You must add a `typedclojure_config.clj` file (or `.cljc` or `.cljs` as applicable) in the root of
+your source tree (or in a resources folder) specifying where to find the type annotations.
+
+You will see the type-checker output where it is reading annotations and extensions when it is loading,
+e.g. `lein typed check` gives this output:
+
+```
+Registering annotations from typed.ann.clojure...
+Registering annotations from clojure-types-lab.typed.core...
+Registering annotations from clojure-types-lab.typed.foobars...
+Registering annotations from typed.ann.clojure...
+Registering annotations from clojure-types-lab.typed.core...
+Registering annotations from clojure-types-lab.typed.foobars...
+Start checking clojure-types-lab.typed.core
+```
+
+See the config here: [typedclojure_config.clj](src/typedclojure_config.clj).
+
 
 ## Typed Clojure Issues
 
@@ -86,6 +106,21 @@ See the [issues.clj](src/clojure_types_lab/typed/issues.clj) for various
 problems related to Typed Clojure.
 
 ## Documentation for Typed Clojure
+
+Unfortunately, the documentation for Typed Clojure is quite sparse.
+
+### Example Type Annotations
+
+Typed Clojure includes annotations for most of the standard Clojure core library.
+You can find the annotations in `typed.ann.clojure.core`. 
+
+In the [Typed Clojure repository](https://github.com/typedclojure/typedclojure)
+it is located in the file `typed/lib.clojure/src/typed/ann/clojure.cljc`
+
+There are also some small examples in the `example-projects` directory.
+
+
+### Core Typed Docs
 Core Typed was the previous incarnation of Typed Clojure. They are quite similar.
 The Core Typed documentation here is thus quite useful for Typed Clojure:
 
@@ -94,6 +129,7 @@ https://clojure-doc.org/articles/ecosystem/core_typed/home/
 https://clojure-doc.org/articles/ecosystem/core_typed/quick_guide/
 
 https://clojure-doc.org/articles/ecosystem/core_typed/types/
+
 
 ### Differences from Core Typed
 

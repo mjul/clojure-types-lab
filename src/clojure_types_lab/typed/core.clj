@@ -1,7 +1,8 @@
 (ns clojure-types-lab.typed.core
   {:lang :core.typed}
   (:require [typed.clojure :as t]
-            [typed.clojure.jvm :as tjvm])
+            [typed.clojure.jvm :as tjvm]
+            [clojure-types-lab.typed.foobars :as fb])
   (:import [java.util Currency]))
 
 
@@ -158,3 +159,17 @@
 
 ;;(t/ann-record Company [id :- t/UUID, contract-id :- t/Str, name :- t/Str])
 ;;(defrecord Contract [id contract-id name])
+
+
+
+;; ----------------------------------------------------------------
+;; We can use annotations from another namespace
+;;
+;; BUT we need to tell the type-checker to from which namespaces to load annotations. 
+;;
+;; This is done in the config file:   typedclojure_config.clj
+
+
+(t/ann foobar [fb/Foo fb/Bar :-> '{:foobar t/Str}])
+(defn foobar [x y]
+  {:foobar (str (:foo x) (:bar y))})
