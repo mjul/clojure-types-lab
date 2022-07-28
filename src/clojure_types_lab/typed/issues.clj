@@ -2,7 +2,8 @@
   {:lang :core.typed}
   (:require
    [clojure.set :as set]
-   [typed.clojure :as t]))
+   [typed.clojure :as t])
+  (:import [java.util Currency]))
 
 
 ;;; Issues and interesting-looking snippets related to Typed Clojure below:
@@ -131,3 +132,61 @@
 
 ;; Type Error (file:...typed_issues.clj:127:24) 
 ;; core.typed Not Yet Implemented Error:(file:...typed_issues.clj:127:24) "NYI HSequential inference " (t/HSeq [t/Int *]) (t/HSequential [z ... z])
+
+
+;; ----------------------------------------------------------------
+
+;; Annotations do not understand imports: class names must be fully qualified
+;;
+;; Note:
+;; java.util.Currency has been imported above
+
+(comment
+
+  ;; Referencing the imported class via the imported name:
+  (macroexpand '(t/ann get-francs [:-> Currency]))
+
+  ;; result v- the second parameter to ann* is the type, you can see
+  ;; it lost its namespace
+  (do
+    (clojure.core.typed/ann*
+     'clojure-types-lab.typed.issues/get-francs
+     '[:-> Currency]
+     'true
+     '(clojure.core.typed/ann get-francs [:-> Currency])))
+
+  ;; 
+
+  (t/ann get-francs [:-> Currency])
+  (t/cf (Currency/getAvailableCurrencies))
+
+  ;; Referencing the class via its fully qualified name:
+  (macroexpand '(t/ann get-francs [:-> java.util.Currency]))
+
+  ;; Result - we keep the namespace 
+  (do
+    (clojure.core.typed/ann*
+     'clojure-types-lab.typed.issues/get-francs
+     '[:-> java.util.Currency]
+     'true
+     '(clojure.core.typed/ann get-francs [:-> java.util.Currency])))
+
+
+  ;; You can also use the reader to expand the import with a back-quote
+
+  (macroexpand '(t/ann get-francs [:-> ~`Currency]))
+
+  ;; Result
+  (do
+    (clojure.core.typed/ann*
+     'clojure-types-lab.typed.issues/get-francs
+     '[:-> 'java.util.Currency]
+     'true
+     '(clojure.core.typed/ann get-francs [:-> 'java.util.Currency])))
+
+  ;;
+  )
+
+
+
+;; ----------------------------------------------------------------
