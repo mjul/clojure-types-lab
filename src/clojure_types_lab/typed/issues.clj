@@ -190,3 +190,34 @@
 
 
 ;; ----------------------------------------------------------------
+
+(comment
+  ;; ann-record expects (symbol :- type) not (:keyword :- type) 
+  ;; This causes the type-checker to raise an assertion exception
+  ;; 
+  (t/ann-record Baz [:baz :- t/Keyword])
+
+  ; Execution error (AssertionError) at typed.cljc.checker.type-rep/DataType-maker (type_rep.clj:305).
+  ; Assert failed: ((con/array-map-c? symbol? (some-fn Scope? Type?)) fields)
+
+  ;; typed.cljc.checker.type-rep/DataType-maker (type_rep.clj:305)
+  ;; typed.cljc.checker.type-ctors/DataType* (type_ctors.clj:626)
+  ;; typed.cljc.checker.type-ctors/DataType* (type_ctors.clj:618)
+  ;; ...
+
+  )
+
+;; ----------------------------------------------------------------
+
+;; Records have a problem with dashed namespace names (and the corresponding underscored directory names)
+
+;; You cannot reference the record type with the namespace alias
+;; (t/defalias DashedBaz fb/Baz)
+
+;; Also, you cannot reference the record type with fully qualified namespace name for the record
+;; (Perhaps because it is not a Var)
+;; (t/defalias DashedBaz clojure-types-lab.typed.foobars.Baz)
+
+;; However, you can refer to its JVM class name where the dashes are underscores:
+(t/defalias DashedBaz clojure_types_lab.typed.foobars.Baz)
+
