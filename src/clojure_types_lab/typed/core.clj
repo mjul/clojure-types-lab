@@ -190,3 +190,34 @@
 (t/ann dashed-baz [t/Keyword :-> DashedBaz])
 (defn dashed-baz [x]
   (fb/->Baz x))
+
+
+;; ----------------------------------------------------------------
+
+;; Multi-methods can be annotated like normal functions
+
+(t/defalias Item '{:tag t/Keyword})
+(t/defalias Book (t/I Item '{:tag ':book :name t/Str}))
+(t/defalias Journal (t/I Item '{:tag ':journal :name t/Str}))
+
+(t/ann description [Item :-> t/Str])
+
+(defmulti description :tag)
+(defmethod description :book [_] (str "A great book"))
+(defmethod description :journal [_] (str "A scholarly journal"))
+
+(t/ann book [t/Str :-> Book])
+(defn book 
+  [n]
+  {:tag :book :name n})
+
+(t/ann journal [t/Str :-> Journal])
+(defn journal
+  [n]
+  {:tag :journal :name n})
+
+(t/ann describe-library [:-> (t/Seqable t/Str)])
+(defn describe-library
+  []
+  (map description [(book "Foo") (journal "Bar")]))
+
