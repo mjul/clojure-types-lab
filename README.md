@@ -111,6 +111,12 @@ Unfortunately, the documentation for Typed Clojure is quite sparse.
 
 You can find the API documentation here: https://api.typedclojure.org/latest/typed.clj.runtime/index.html
 
+In the REPL, you can look up documentation like for any fragment like this:
+
+```clojure
+    (t/doc-clj t/HVec)
+```
+
 ### Example Type Annotations
 
 Typed Clojure includes annotations for most of the standard Clojure core library.
