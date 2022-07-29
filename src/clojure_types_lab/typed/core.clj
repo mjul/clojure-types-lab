@@ -173,3 +173,20 @@
 (t/ann foobar [fb/Foo fb/Bar :-> '{:foobar t/Str}])
 (defn foobar [x y]
   {:foobar (str (:foo x) (:bar y))})
+
+
+;; Records from other namespaces are difficult though
+
+;; You cannot reference the record type with the namespace alias
+;; (t/defalias DashedBaz fb/Baz)
+
+;; Also, you cannot reference the record type with fully qualified namespace name 
+;; (Perhaps because it is not a Var)
+;; (t/defalias DashedBaz clojure-types-lab.typed.foobars.Baz)
+
+;; However, you can refer to its JVM class name where the the dashes are underscores:
+(t/defalias DashedBaz clojure_types_lab.typed.foobars.Baz)
+
+(t/ann dashed-baz [t/Keyword :-> DashedBaz])
+(defn dashed-baz [x]
+  (fb/->Baz x))

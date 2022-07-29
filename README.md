@@ -99,6 +99,14 @@ Start checking clojure-types-lab.typed.core
 
 See the config here: [typedclojure_config.clj](src/typedclojure_config.clj).
 
+#### Referencing `ann-record` across files
+Note that type annotations for records (`ann-record`) expose a [leaky abstraction](https://en.wikipedia.org/wiki/Leaky_abstraction).
+
+If the namespace contains dashes, you cannot refer to them by that name, nor an alias for that namespace.
+Instead you have to use the JVM name of the record type to refer to it.
+
+See [core.clj](src/clojure_types_lab/typed/core.clj) for an example.
+
 
 ## Typed Clojure Issues
 

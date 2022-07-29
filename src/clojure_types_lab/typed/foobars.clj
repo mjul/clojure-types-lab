@@ -17,3 +17,8 @@
 (defn bar
   [x] 
   {:bar x})
+
+;; Also, an annotated record type
+(t/ann-record Baz [baz :- t/Keyword])
+;;(t/ann ->Baz [t/Keyword :-> Baz])
+(defrecord Baz [baz])
