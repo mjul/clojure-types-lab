@@ -221,3 +221,38 @@
   []
   (map description [(book "Foo") (journal "Bar")]))
 
+
+;; ----------------------------------------------------------------
+
+;; We can specify maps in many ways
+
+(t/defalias MapNumToKeyword (t/Map t/Num t/Keyword)) 
+
+(t/ann num-to-kw MapNumToKeyword)
+(def num-to-kw {1 :P1, 2 :P2, 3 :P3})
+
+(t/defalias AbcToKeyword '{:a t/Keyword
+                           :b t/Keyword
+                           :c t/Keyword})
+
+
+;; ----------------------------------------------------------------
+
+;; We can annotate records and protocols
+
+(t/ann-protocol Munchable 
+                ;; We annotate each protocol function with the protocol name as the first parameter
+                munch [Munchable :-> t/Str])
+(defprotocol Munchable 
+    (munch [_] "Munch this food."))
+
+(t/ann-record Sandwich [])
+(defrecord Sandwich [] 
+  Munchable
+  (munch [_] (apply str "Munching a sandwich")))
+
+;; Let's try the short hand defn syntax that includes type annotations
+(t/defn eat [x :- Munchable] :- t/Str
+  (munch x))
+
+
