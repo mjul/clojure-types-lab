@@ -221,3 +221,28 @@
 ;; However, you can refer to its JVM class name where the dashes are underscores:
 (t/defalias DashedBaz clojure_types_lab.typed.foobars.Baz)
 
+;; ----------------------------------------------------------------
+
+;; You can make ann-record crash by omitting the record name
+
+(comment
+  (t/ann-record [:name tc/Str])
+
+;;  ; Execution error (AssertionError) at clojure.core.typed.current-impl/gen-datatype* (current_impl.cljc:567).
+;;  ; Assert failed: (impl-case :clojure (simple-symbol? provided-name) :cljs (qualified-symbol? provided-name))
+;;  clj꞉clojure-types-lab.typed.issues꞉> 
+;;  clojure.core.typed.current-impl/gen-datatype* (current_impl.cljc:567)
+;;  clojure.lang.Var/invoke (Var.java:424)
+;;  clojure.core.typed/ann-record* (typed.clj:928)
+;;  clojure.core.typed.current-impl/with-clojure-impl* (current_impl.cljc:297)
+;;  clojure.core/apply (core.clj:667)
+;;  clojure.core/with-bindings* (core.clj:1990)
+;;  clojure.core.typed.current-impl/with-clojure-impl* (current_impl.cljc:296)
+;;  clojure.core.typed.current-impl/with-clojure-impl* (current_impl.cljc:295)
+;;  clojure.lang.Var/invoke (Var.java:384)
+;;  clojure.core.typed/ann-record* (typed.clj:927)
+;;  clojure.core.typed/ann-record* (typed.clj:926)
+;;  clojure.core.typed/ann-record* (typed.clj:910)
+;;  clojure-types-lab.typed.issues/eval56918 (form-init16446498427567645729.clj:228)
+
+  )
