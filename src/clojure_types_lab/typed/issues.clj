@@ -246,3 +246,19 @@
 ;;  clojure-types-lab.typed.issues/eval56918 (form-init16446498427567645729.clj:228)
 
   )
+
+;; ----------------------------------------------------------------
+
+;; unparse-type uses the "old" arrow notation from Core Typed (->), not the new one (:->)
+
+(comment
+  (t/ann add-2 [t/Int t/Int :-> t/Int])
+  (t/cf (defn add-2 [x] 1) add-2)
+  ;;=>
+  ;; ; Type Error (c:\Users\marti\src\github\mjul\clojure-types-lab\.calva\output-window\output.calva-repl:160:7) 
+  ;; ; No matching arities: [t/Int t/Int -> t/Int]
+  ;; ; 
+  ;; ; 
+  ;; in:
+  ;; ([x] 1)
+  )
