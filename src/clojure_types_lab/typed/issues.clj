@@ -223,29 +223,51 @@
 
 ;; ----------------------------------------------------------------
 
-;; You can make ann-record crash by omitting the record name
+;; You can make ann-record crash by omitting the record name 
+;; It also has some other quirks
 
 (comment
-  (t/ann-record [:name tc/Str])
+  ;; Correct usage:
+  (t/ann-record Foo [name :- tc/Str])
 
-;;  ; Execution error (AssertionError) at clojure.core.typed.current-impl/gen-datatype* (current_impl.cljc:567).
-;;  ; Assert failed: (impl-case :clojure (simple-symbol? provided-name) :cljs (qualified-symbol? provided-name))
-;;  clj꞉clojure-types-lab.typed.issues꞉> 
-;;  clojure.core.typed.current-impl/gen-datatype* (current_impl.cljc:567)
-;;  clojure.lang.Var/invoke (Var.java:424)
-;;  clojure.core.typed/ann-record* (typed.clj:928)
-;;  clojure.core.typed.current-impl/with-clojure-impl* (current_impl.cljc:297)
-;;  clojure.core/apply (core.clj:667)
-;;  clojure.core/with-bindings* (core.clj:1990)
-;;  clojure.core.typed.current-impl/with-clojure-impl* (current_impl.cljc:296)
-;;  clojure.core.typed.current-impl/with-clojure-impl* (current_impl.cljc:295)
-;;  clojure.lang.Var/invoke (Var.java:384)
-;;  clojure.core.typed/ann-record* (typed.clj:927)
-;;  clojure.core.typed/ann-record* (typed.clj:926)
-;;  clojure.core.typed/ann-record* (typed.clj:910)
-;;  clojure-types-lab.typed.issues/eval56918 (form-init16446498427567645729.clj:228)
+  ;; Missing record name
+  (t/ann-record #_Foo [name :- tc/Str])
+
+  ;;=>
+  ;;  ; Execution error (AssertionError) at clojure.core.typed.current-impl/gen-datatype* (current_impl.cljc:567).
+  ;;  ; Assert failed: (impl-case :clojure (simple-symbol? provided-name) :cljs (qualified-symbol? provided-name))
+  ;;  clojure.core.typed.current-impl/gen-datatype* (current_impl.cljc:567)
+  ;;  clojure.lang.Var/invoke (Var.java:424)
+  ;;  clojure.core.typed/ann-record* (typed.clj:928)
+  ;;  clojure.core.typed.current-impl/with-clojure-impl* (current_impl.cljc:297)
+  ;;  clojure.core/apply (core.clj:667)
+  ;;  clojure.core/with-bindings* (core.clj:1990)
+  ;;  clojure.core.typed.current-impl/with-clojure-impl* (current_impl.cljc:296)
+  ;;  clojure.core.typed.current-impl/with-clojure-impl* (current_impl.cljc:295)
+  ;;  clojure.lang.Var/invoke (Var.java:384)
+  ;;  clojure.core.typed/ann-record* (typed.clj:927)
+  ;;  clojure.core.typed/ann-record* (typed.clj:926)
+  ;;  clojure.core.typed/ann-record* (typed.clj:910)
+  ;;  clojure-types-lab.typed.issues/eval41412 (form-init2898751586910906665.clj:233)
+  ;;  clojure.lang.Compiler/eval (Compiler.java:7194)
+
+
+  ;; Other examples with bad syntax that make it crash
+
+  ;; surprisingly, this is accepted with a keyword instead of a symbol field name
+  (t/ann-record Foo [:name :- tc/Str])
+  ;;=> nil
+
+  ;; surprisingly, this is accepted with a return arrow instead of :-
+  (t/ann-record Foo [name :-> tc/Str])
+  ;;=> nil
+
+  ;; surprisingly, if the :- is missing, it is also accepted:
+  (t/ann-record Foo [name #_:- tc/Str])
+  ;;=> nil
 
   )
+
 
 ;; ----------------------------------------------------------------
 
