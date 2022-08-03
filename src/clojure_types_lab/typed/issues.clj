@@ -284,3 +284,44 @@
   ;; in:
   ;; ([x] 1)
   )
+
+;; ----------------------------------------------------------------
+
+;; sort-by does not understand the Comparable<T> interface
+
+(t/defalias Interval '{:start java.time.Instant :end java.time.Instant})
+(t/defn interval-start [x :- Interval] :- java.time.Instant
+        (:start x))
+
+^::t/ignore
+(t/defn sort-intervals-by-start [xs :- (t/Coll Interval)] :- (t/ASeq java.time.Instant)
+        (sort-by interval-start xs))
+
+;; If you remove ^::tc/ignore above and check the types, you get this error
+;; even if sort-by works since java.time.Instant implements Comparable<Instant>
+
+;;  ; Type Error (file:/C:/Users/marti/src/github/mjul/clojure-types-lab/src/clojure_types_lab/typed/issues.clj:297:9) 
+;;  ; Polymorphic function sort-by could not be applied to arguments:
+;;  ; Polymorphic Variables:
+;;  	a
+;;  
+;;  Domains:
+;;  	[a -> Number] (t/Seqable a)
+;;  
+;;  Arguments:
+;;  	[clojure-types-lab.typed.issues/Interval -> java.time.Instant] (IPersistentCollection clojure-types-lab.typed.issues/Interval)
+;;  
+;;  Ranges:
+;;  	(t/ASeq a)
+;;  
+;;  with expected type:
+;;  	(t/ASeq java.time.Instant)
+;;  
+;;  
+;;  ; 
+;;  ; 
+;;  in:
+;;  (sort-by interval-start xs)
+
+
+;; ----------------------------------------------------------------
