@@ -267,3 +267,12 @@
         (inc x)))
 ;; => [[t/Int -> t/Int] {:then tt, :else ff}]
 
+
+;; ----------------------------------------------------------------
+;; The type-checker supports polymorphism
+
+
+;; We can transform a seq to something of the same type (endomorphism)
+(t/ann even-positions (t/All [x] [(t/Seq x) :-> (t/Seq x)]))
+(defn even-positions [xs]
+  (take-nth 2 xs))
