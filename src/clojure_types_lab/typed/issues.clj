@@ -335,6 +335,13 @@
   [duration]
   (org.threeten.extra.AmountFormats/wordBased ^java.time.Duration duration (java.util.Locale/getDefault)))
 
+;; For reference, wordBased has these overloads in the JAR (it is a Java library):
+;;
+;;     public static String wordBased(Period period, Locale locale)
+;;     public static String wordBased(Duration duration, Locale locale)
+;;     public static String wordBased(Period period, Duration duration, Locale locale)
+
+
 ;; If you remove the ::t/ignore above you get the exception below
 ;; It is not capable of suggesting the missing type hint.
 ;; You can work around it by adding the missing type-hint for duration, ^java.time.Duration duration
