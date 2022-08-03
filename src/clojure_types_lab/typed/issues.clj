@@ -2,7 +2,9 @@
   {:lang :core.typed}
   (:require
    [clojure.set :as set]
-   [typed.clojure :as t])
+   [java-time :as jt]
+   [typed.clojure :as t]
+   [typed.clojure.jvm :as tjvm])
   (:import [java.util Currency]))
 
 
@@ -325,3 +327,159 @@
 
 
 ;; ----------------------------------------------------------------
+;; The type-checker crashes in interop type-hinting
+;; Note: this example uses the java-time library (a wrapper for java.time.*)
+
+^::t/ignore
+(defn duration->words
+  [duration]
+  (org.threeten.extra.AmountFormats/wordBased ^java.time.Duration duration (java.util.Locale/getDefault)))
+
+;; If you remove the ::t/ignore above you get the exception below
+;; It is not capable of suggesting the missing type hint.
+;; You can work around it by adding the missing type-hint for duration, ^java.time.Duration duration
+
+;;  335:  WARNING: Checking clojure-types-lab.typed.issues/duration->words definition without an expected type.
+;;  ; Execution error (AssertionError) at typed.cljc.checker.check.utils/Type->Class (utils.clj:478).
+;;  ; Assert failed: (r/Type? t)
+;;  clj꞉clojure-types-lab.typed.issues꞉> 
+;;  typed.cljc.checker.check.utils/Type->Class (utils.clj:478)
+;;  typed.clj.checker.check.type-hints/suggest-type-hints (type_hints.clj:23)
+;;  typed.clj.checker.check.type-hints/suggest-type-hints (type_hints.clj:16)
+;;  typed.clj.checker.check.method/check-invoke-method (method.clj:46)
+;;  typed.clj.checker.check.method/check-invoke-method (method.clj:33)
+;;  typed.clj.checker.check.method/check-invoke-method (method.clj:24)
+;;  typed.clj.checker.check.host-interop/check-host-interop (host_interop.clj:77)
+;;  typed.clj.checker.check.host-interop/check-host-interop (host_interop.clj:60)
+;;  typed.clj.checker.check.host-interop/check-host-call (host_interop.clj:117)
+;;  typed.clj.checker.check.host-interop/check-host-call (host_interop.clj:95)
+;;  typed.clj.checker.check/eval28740 (check.clj:1672)
+;;  clojure.lang.MultiFn/invoke (MultiFn.java:234)
+;;  typed.clj.checker.check/check-expr (check.clj:251)
+;;  typed.clj.checker.check/check-expr (check.clj:221)
+;;  typed.clj.checker.check/check-expr (check.clj:204)
+;;  typed.cljc.checker.check.do/check-do (do.clj:70)
+;;  typed.cljc.checker.check.do/check-do (do.clj:64)
+;;  typed.cljc.checker.check.do/check-do (do.clj:-1)
+;;  clojure.lang.Range/reduce (Range.java:180)
+;;  clojure.core/reduce (core.clj:6885)
+;;  clojure.core/reduce (core.clj:6868)
+;;  typed.cljc.checker.check.do/check-do (do.clj:50)
+;;  typed.cljc.checker.check.do/check-do (do.clj:34)
+;;  typed.clj.checker.check/eval28720 (check.clj:1652)
+;;  clojure.lang.MultiFn/invoke (MultiFn.java:234)
+;;  typed.clj.checker.check/check-expr (check.clj:251)
+;;  typed.clj.checker.check/check-expr (check.clj:221)
+;;  typed.clj.checker.check/check-expr (check.clj:204)
+;;  typed.cljc.checker.check.fn-method-one/check-fn-method1 (fn_method_one.clj:204)
+;;  typed.cljc.checker.check.fn-method-one/check-fn-method1 (fn_method_one.clj:171)
+;;  typed.cljc.checker.check.fn-method-one/check-fn-method1 (fn_method_one.clj:54)
+;;  typed.cljc.checker.check.special.fn/check-anon (fn.clj:65)
+;;  clojure.core/mapv (core.clj:6979)
+;;  clojure.lang.PersistentVector/reduce (PersistentVector.java:343)
+;;  clojure.core/reduce (core.clj:6885)
+;;  clojure.core/mapv (core.clj:6970)
+;;  typed.cljc.checker.check.special.fn/check-anon (fn.clj:55)
+;;  typed.cljc.checker.check.special.fn/check-anon (fn.clj:30)
+;;  typed.cljc.checker.check.special.fn/check-core-fn-no-expected (fn.clj:201)
+;;  typed.cljc.checker.check.special.fn/check-core-fn-no-expected (fn.clj:196)
+;;  typed.cljc.checker.check.special.fn/check-core-fn-no-expected (fn.clj:187)
+;;  typed.clj.checker.check/eval28676 (check.clj:1630)
+;;  typed.clj.checker.check/eval28676 (check.clj:1620)
+;;  clojure.lang.MultiFn/invoke (MultiFn.java:234)
+;;  typed.clj.checker.check/check-expr (check.clj:251)
+;;  typed.clj.checker.check/check-expr (check.clj:221)
+;;  typed.clj.checker.check/check-expr (check.clj:204)
+;;  typed.cljc.checker.check.with-meta/check-with-meta (with_meta.clj:31)
+;;  typed.cljc.checker.check.with-meta/check-with-meta (with_meta.clj:25)
+;;  typed.clj.checker.check/eval28879 (check.clj:1914)
+;;  clojure.lang.MultiFn/invoke (MultiFn.java:234)
+;;  typed.clj.checker.check/check-expr (check.clj:251)
+;;  typed.clj.checker.check/check-expr (check.clj:221)
+;;  typed.clj.checker.check/check-expr (check.clj:204)
+;;  typed.clj.ext.clojure.core--fn/defuspecial--fn (core__fn.clj:131)
+;;  typed.clj.ext.clojure.core--fn/defuspecial--fn (core__fn.clj:119)
+;;  clojure.lang.Var/invoke (Var.java:388)
+;;  typed.cljc.checker.check.unanalyzed/-unanalyzed-special (unanalyzed.clj:50)
+;;  typed.cljc.checker.check.unanalyzed/-unanalyzed-special (unanalyzed.clj:47)
+;;  typed.clj.checker.check/check-expr (check.clj:242)
+;;  typed.clj.checker.check/check-expr (check.clj:239)
+;;  typed.clj.checker.check/check-expr (check.clj:221)
+;;  typed.clj.checker.check/check-expr (check.clj:204)
+;;  typed.clj.checker.check/check-expr (check.clj:213)
+;;  typed.clj.checker.check/check-expr (check.clj:204)
+;;  typed.cljc.checker.check.def/check-normal-def (def.clj:94)
+;;  typed.cljc.checker.check.def/check-normal-def (def.clj:30)
+;;  typed.cljc.checker.check.def/check-def (def.clj:147)
+;;  typed.cljc.checker.check.def/check-def (def.clj:137)
+;;  typed.clj.checker.check/eval28889 (check.clj:1934)
+;;  clojure.lang.MultiFn/invoke (MultiFn.java:234)
+;;  typed.clj.checker.check/check-expr (check.clj:251)
+;;  typed.clj.checker.check/check-expr (check.clj:221)
+;;  typed.clj.checker.check/check-expr (check.clj:204)
+;;  typed.clj.ext.clojure.core--defn/defuspecial--defn (core__defn.clj:25)
+;;  typed.clj.ext.clojure.core--defn/defuspecial--defn (core__defn.clj:19)
+;;  clojure.lang.Var/invoke (Var.java:388)
+;;  typed.cljc.checker.check.unanalyzed/-unanalyzed-special (unanalyzed.clj:50)
+;;  typed.cljc.checker.check.unanalyzed/-unanalyzed-special (unanalyzed.clj:47)
+;;  typed.clj.checker.check/check-expr (check.clj:242)
+;;  typed.clj.checker.check/check-expr (check.clj:239)
+;;  typed.clj.checker.check/check-expr (check.clj:221)
+;;  typed.clj.checker.check/check-expr (check.clj:204)
+;;  typed.clj.checker.check/check-top-level (check.clj:269)
+;;  typed.clj.checker.check/check-top-level (check.clj:266)
+;;  clojure.core/apply (core.clj:667)
+;;  clojure.core/with-bindings* (core.clj:1990)
+;;  typed.clj.checker.check/check-top-level (check.clj:264)
+;;  typed.clj.checker.check/check-top-level (check.clj:255)
+;;  typed.clj.checker.check/check-ns1 (check.clj:151)
+;;  typed.clj.checker.check/check-ns1 (check.clj:135)
+;;  typed.clj.checker.check/check-ns1 (check.clj:131)
+;;  typed.clj.checker.check/check-ns1 (check.clj:133)
+;;  typed.clj.checker.check/check-ns1 (check.clj:131)
+;;  typed.cljc.checker.check.utils/check-ns-and-deps (utils.clj:461)
+;;  typed.cljc.checker.check.utils/check-ns-and-deps (utils.clj:427)
+;;  typed.clj.checker.check/check-ns-and-deps (check.clj:154)
+;;  typed.cljc.checker.check-ns-common/check-ns-info (check_ns_common.clj:78)
+;;  typed.cljc.checker.check-ns-common/check-ns-info (check_ns_common.clj:80)
+;;  typed.cljc.checker.check-ns-common/check-ns-info (check_ns_common.clj:66)
+;;  clojure.core/apply (core.clj:667)
+;;  clojure.core/with-bindings* (core.clj:1990)
+;;  typed.cljc.checker.check-ns-common/check-ns-info (check_ns_common.clj:51)
+;;  typed.cljc.checker.check-ns-common/check-ns-info (check_ns_common.clj:37)
+;;  typed.cljc.checker.check-ns-common/check-ns (check_ns_common.clj:98)
+;;  typed.cljc.checker.check-ns-common/check-ns (check_ns_common.clj:97)
+;;  typed.clj.checker.check-ns/check-ns (check_ns.clj:33)
+;;  typed.clj.checker.check-ns/check-ns (check_ns.clj:31)
+;;  typed.clj.checker/check-ns3 (checker.clj:198)
+;;  typed.clj.checker/check-ns3 (checker.clj:194)
+;;  typed.clj.checker/check-ns3 (checker.clj:195)
+;;  typed.clj.checker/check-ns3 (checker.clj:194)
+;;  clojure.lang.Var/invoke (Var.java:380)
+;;  typed.clojure/check-ns-clj (clojure.cljc:158)
+;;  typed.clojure/check-ns-clj (clojure.cljc:155)
+;;  clojure-types-lab.typed.issues/eval43929 (form-init8733608597580520748.clj:1125)
+;;  clojure.lang.Compiler/eval (Compiler.java:7194)
+
+
+
+;; ----------------------------------------------------------------
+
+;; The type-checker appears to lose some information about the types when adding a :post condition
+
+
+(comment 
+  
+  ;; Plain function, no :post
+  (t/cf (fn [] (->> [1 :a] (filter int?))))
+  ;;=> [[-> (t/ASeq (t/U Short Byte Long Integer))] {:then tt, :else ff}]
+
+  ;; Same function with an additional :post expression
+  (t/cf (fn [] {:post [(seqable? %)]} (->> [1 :a] (filter int?))))
+  ;;=> [[->
+  ;;     (t/I (ISeq (t/U Short Byte Long Integer)) Sequential IObj (java.util.List (t/U Short Byte Long Integer)))
+  ;;     :filters
+  ;;     {:then tt, :else ff}]
+  ;;     {:then tt, :else ff}]
+
+)
