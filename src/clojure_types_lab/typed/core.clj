@@ -256,3 +256,14 @@
   (munch x))
 
 
+;; ----------------------------------------------------------------
+;; The type-checker supports anonymous functions 
+;; via wrapping with ann-form or via the t/fn macro
+
+(t/cf (t/ann-form #(inc %) [t/Int :-> t/Int]))
+;; => [[t/Int -> t/Int] {:then tt, :else ff}]
+
+(t/cf (t/fn [x :- t/Int] :- t/Int
+        (inc x)))
+;; => [[t/Int -> t/Int] {:then tt, :else ff}]
+
